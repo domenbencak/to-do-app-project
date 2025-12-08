@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./App.css";
 import api from "./axios";
 import AuthForm from "./components/AuthForm";
 import TodoItem from "./components/TodoItem";
+
+const FILTERS = [
+  { key: "all", label: "All" },
+  { key: "active", label: "Active" },
+  { key: "done", label: "Done" },
+];
 
 function App() {
   const [user, setUser] = useState(null);
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
   const [authMode, setAuthMode] = useState("signin");
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -61,7 +68,27 @@ function App() {
     localStorage.removeItem("refreshToken");
     setUser(null);
     setTodos([]);
+    setFilter("all");
   };
+
+  const counts = useMemo(() => {
+    const completed = todos.filter((todo) => todo.completed).length;
+    const active = todos.length - completed;
+    return { all: todos.length, active, done: completed };
+  }, [todos]);
+
+  const filteredTodos = useMemo(() => {
+    if (filter === "active") return todos.filter((todo) => !todo.completed);
+    if (filter === "done") return todos.filter((todo) => todo.completed);
+    return todos;
+  }, [todos, filter]);
+
+  const emptyMessage =
+    {
+      all: "No tasks yet. Add your first task above.",
+      active: "All caught up! No active tasks.",
+      done: "No completed tasks yet.",
+    }[filter];
 
   if (!user)
     return (
@@ -100,15 +127,38 @@ function App() {
           />
           <button className="btn btn-primary" onClick={addTodo}>Add</button>
         </div>
+        <div className="filters-row">
+          <div className="filter-group">
+            {FILTERS.map(({ key, label }) => (
+              <button
+                key={key}
+                type="button"
+                className={`filter-btn ${filter === key ? "filter-btn--active" : ""}`}
+                onClick={() => setFilter(key)}
+                aria-pressed={filter === key}
+              >
+                <span>{label}</span>
+                <span className="filter-count">{counts[key]}</span>
+              </button>
+            ))}
+          </div>
+          <span className="muted-text">
+            {counts.done}/{counts.all} done
+          </span>
+        </div>
         <div className="todo-list">
-          {todos.map((todo) => (
-            <TodoItem
-              key={todo._id}
-              todo={todo}
-              onToggle={toggleTodo}
-              onDelete={deleteTodo}
-            />
-          ))}
+          {filteredTodos.length === 0 ? (
+            <div className="empty-state">{emptyMessage}</div>
+          ) : (
+            filteredTodos.map((todo) => (
+              <TodoItem
+                key={todo._id}
+                todo={todo}
+                onToggle={toggleTodo}
+                onDelete={deleteTodo}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>

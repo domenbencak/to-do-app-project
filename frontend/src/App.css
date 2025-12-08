@@ -76,6 +76,71 @@ body {
   margin: 16px 0 20px;
 }
 
+.filters-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.filter-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.08s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.filter-btn:active {
+  transform: translateY(1px);
+}
+
+.filter-btn--active {
+  background: linear-gradient(180deg, var(--primary), var(--primary-600));
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.8rem;
+  color: inherit;
+}
+
+.muted-text {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 .input {
   width: 100%;
   padding: 12px 14px;
@@ -149,6 +214,15 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.empty-state {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px dashed rgba(148, 163, 184, 0.35);
+  color: var(--muted);
+  text-align: center;
+  background: rgba(2, 6, 23, 0.45);
 }
 
 .todo-item {
