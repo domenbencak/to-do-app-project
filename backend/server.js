@@ -2,8 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import postRoutes from "./routes/postRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
+import todoRoutes from "./routes/todoRoutes.js";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
 dotenv.config();
@@ -53,6 +54,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/todos", todoRoutes);
 
 const PORT = process.env.PORT || 3242;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
