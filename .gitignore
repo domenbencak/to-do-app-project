@@ -8,3 +8,5 @@ backend/logs/
 frontend/logs/
 backend/.env.example
 frontend/.env.example
+backend/coverage/
+frontend/coverage/
