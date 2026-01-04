@@ -124,11 +124,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: docker_build_push
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    env:
+      RENDER_DEPLOY_HOOK_BACKEND: ${{ secrets.RENDER_DEPLOY_HOOK_BACKEND }}
+      RENDER_DEPLOY_HOOK_FRONTEND: ${{ secrets.RENDER_DEPLOY_HOOK_FRONTEND }}
     steps:
       - name: Trigger backend deploy (Render)
-        if: ${{ secrets.RENDER_DEPLOY_HOOK_BACKEND != '' }}
-        run: curl --fail --silent --show-error -X POST "${{ secrets.RENDER_DEPLOY_HOOK_BACKEND }}"
+        if: env.RENDER_DEPLOY_HOOK_BACKEND != ''
+        run: curl --fail --silent --show-error -X POST "$RENDER_DEPLOY_HOOK_BACKEND"
 
       - name: Trigger frontend deploy (Render)
-        if: ${{ secrets.RENDER_DEPLOY_HOOK_FRONTEND != '' }}
-        run: curl --fail --silent --show-error -X POST "${{ secrets.RENDER_DEPLOY_HOOK_FRONTEND }}"
+        if: env.RENDER_DEPLOY_HOOK_FRONTEND != ''
+        run: curl --fail --silent --show-error -X POST "$RENDER_DEPLOY_HOOK_FRONTEND"
