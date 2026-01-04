@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import todoRoutes from "./routes/todoRoutes.js";
-import { MongoMemoryServer } from "mongodb-memory-server";
 
 dotenv.config();
 const app = express();
@@ -25,8 +24,10 @@ app.use(
 app.use(express.json());
 
 let memoryServer;
+const getMongoUri = () => process.env.MONGO_URI || process.env.MONGODB_URI;
+
 const connectToDatabase = async () => {
-  const uri = process.env.MONGO_URI;
+  const uri = getMongoUri();
 
   try {
     if (uri) {
@@ -35,7 +36,15 @@ const connectToDatabase = async () => {
       return;
     }
 
-    // Fallback for local development without Mongo installed.
+    // Fallback when no external Mongo is provided (data will not persist).
+    if (process.env.NODE_ENV === "production") {
+      console.warn(
+        "No MONGO_URI provided; starting in-memory MongoDB (data is ephemeral)."
+      );
+    } else {
+      console.log("No MONGO_URI provided; starting in-memory MongoDB.");
+    }
+    const { MongoMemoryServer } = await import("mongodb-memory-server");
     memoryServer = await MongoMemoryServer.create();
     const memoryUri = memoryServer.getUri();
     await mongoose.connect(memoryUri);

@@ -53,8 +53,18 @@ const createRes = () => {
   return res;
 };
 
+let consoleErrorSpy;
+
+beforeAll(() => {
+  consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+});
+
 beforeEach(() => {
   jest.clearAllMocks();
+});
+
+afterAll(() => {
+  consoleErrorSpy.mockRestore();
 });
 
 describe("authController", () => {

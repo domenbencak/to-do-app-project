@@ -10,3 +10,4 @@ backend/.env.example
 frontend/.env.example
 backend/coverage/
 frontend/coverage/
+backend/build/
