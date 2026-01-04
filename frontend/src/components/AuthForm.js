@@ -61,6 +61,4 @@ const AuthForm = ({ mode, onAuthSuccess }) => {
   );
 };
 
-const styles = {};
-
 export default AuthForm;
