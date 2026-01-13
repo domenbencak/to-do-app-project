@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../axios";
 
 const AuthForm = ({ mode, onAuthSuccess }) => {
   const [email, setEmail] = useState("");
@@ -14,7 +14,7 @@ const AuthForm = ({ mode, onAuthSuccess }) => {
       const payload =
         mode === "signup" ? { username, email, password } : { email, password };
 
-      const res = await axios.post(url, payload);
+      const res = await api.post(url, payload);
 
       // Store tokens here
       localStorage.setItem("token", res.data.token);
